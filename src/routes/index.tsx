@@ -1008,7 +1008,7 @@ function App() {
     <div style={{ minHeight: "100vh", background: T.bg, fontFamily: "'Georgia', serif" }}>
       <header
         style={{
-          background: `linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.75) 55%, rgba(8,8,8,0.95) 100%), url(${heroCover}) center/cover no-repeat`,
+          background: "#080808",
           borderBottom: `1px solid ${T.border}`,
           padding: isMobile ? "80px 20px 36px" : "140px 40px 56px",
           textAlign: "center",
