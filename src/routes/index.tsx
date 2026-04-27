@@ -1037,8 +1037,8 @@ function App() {
             position: "relative",
           }}
         >
-          Catalogue non-Officiel <br>par ta Boîte préférée 📦</br>
-          <br>Saison 2026</br>
+          Catalogue non-Officiel <br />par ta Boîte préférée 📦
+          <br />Saison 2026
         </p>
         <h1
           style={{
