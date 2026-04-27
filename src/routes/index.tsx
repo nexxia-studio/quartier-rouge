@@ -1037,7 +1037,7 @@ function App() {
             position: "relative",
           }}
         >
-          Catalogue Officiel <br>Saison 2026</br>
+          Catalogue Officiel <br />Saison 2026
         </p>
         <h1
           style={{
