@@ -1145,6 +1145,30 @@ function App() {
           textAlign: "center",
         }}
       >
+        <h2
+          style={{
+            margin: "0 0 10px",
+            fontSize: isMobile ? "22px" : "30px",
+            fontWeight: 700,
+            color: T.textPrim,
+            letterSpacing: "-0.5px",
+            lineHeight: 1.15,
+          }}
+        >
+          Choisis ta professionnelle, vis ton moment 🔥
+        </h2>
+        <p
+          style={{
+            margin: "0 auto 22px",
+            maxWidth: "560px",
+            fontSize: isMobile ? "14px" : "16px",
+            color: T.textSec,
+            fontStyle: "italic",
+            padding: "0 8px",
+          }}
+        >
+          Parcours le catalogue, trouve celle qui te fait vibrer et réserve un instant rien que pour toi.
+        </p>
         <div style={{ maxWidth: "560px", margin: "0 auto", position: "relative" }}>
           <span
             style={{
