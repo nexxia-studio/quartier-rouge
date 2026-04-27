@@ -1061,12 +1061,13 @@ function App() {
         <h1
           style={{
             margin: "0 0 6px",
-            fontSize: "clamp(34px, 9vw, 68px)",
+            fontSize: "clamp(42px, 11vw, 96px)",
             fontWeight: "bold",
             lineHeight: 1.05,
             color: "#fff",
             letterSpacing: "-1px",
             position: "relative",
+            textShadow: "0 4px 30px rgba(0,0,0,0.85), 0 2px 8px rgba(192,0,10,0.4)",
           }}
         >
           Quartier Rouge
