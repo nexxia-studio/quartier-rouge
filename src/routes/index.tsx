@@ -226,20 +226,20 @@ const DURATIONS = [
 ];
 
 const T = {
-  bg: "#0d0d0d",
-  bgCard: "#161616",
-  bgSide: "#111111",
-  bgInput: "#1a1a1a",
-  border: "#2a2a2a",
+  bg: "#141014",
+  bgCard: "#1f1a1d",
+  bgSide: "#181417",
+  bgInput: "#231d20",
+  border: "#3a2e33",
   borderHot: "#c0000a",
-  red: "#c0000a",
-  redBright: "#e8000f",
+  red: "#d8000c",
+  redBright: "#ff1a26",
   redDim: "#7a0006",
-  redGlow: "rgba(192,0,10,0.18)",
-  textPrim: "#f0e6e6",
-  textSec: "#8a7070",
-  textDim: "#4a3838",
-  gold: "#c8913a",
+  redGlow: "rgba(216,0,12,0.22)",
+  textPrim: "#f5ecec",
+  textSec: "#b59a9a",
+  textDim: "#7a6062",
+  gold: "#d4a14a",
 };
 
 function Stars({ rating }: { rating: number }) {
@@ -633,7 +633,7 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
         e.currentTarget.style.borderColor = T.border;
       }}
     >
-      <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
+      <div style={{ position: "relative", height: "260px", overflow: "hidden" }}>
         <img
           src={performer.photo}
           alt={performer.name}
@@ -643,14 +643,14 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
             height: "100%",
             objectFit: "cover",
             objectPosition: "center 20%",
-            filter: "brightness(0.7) saturate(0.6)",
+            filter: "brightness(1.05) saturate(0.95) contrast(1.05)",
           }}
         />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to top, rgba(5,0,0,0.92) 0%, transparent 55%)",
+            background: "linear-gradient(to top, rgba(5,0,0,0.85) 0%, rgba(5,0,0,0.15) 50%, transparent 75%)",
           }}
         />
         <div
@@ -658,14 +658,15 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
             position: "absolute",
             top: "12px",
             right: "12px",
-            background: performer.available ? "rgba(0,60,20,0.85)" : "rgba(60,0,0,0.85)",
+            background: performer.available ? "rgba(0,80,30,0.92)" : "rgba(80,0,0,0.92)",
             border: `1px solid ${performer.available ? "#1a5a30" : T.redDim}`,
-            color: performer.available ? "#4ade80" : T.red,
+            color: performer.available ? "#7dffaf" : "#ff4d5a",
             borderRadius: "999px",
             padding: "4px 10px",
             fontSize: "11px",
             fontWeight: 700,
             letterSpacing: "0.5px",
+            backdropFilter: "blur(4px)",
           }}
         >
           {performer.available ? "● DISPONIBLE" : "● INDISPONIBLE"}
@@ -675,24 +676,43 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
             position: "absolute",
             top: "12px",
             left: "12px",
-            background: "rgba(0,0,0,0.6)",
+            background: "rgba(0,0,0,0.7)",
             border: `1px solid ${T.border}`,
             color: T.gold,
             borderRadius: "999px",
             padding: "4px 10px",
             fontSize: "11px",
             fontWeight: 600,
+            backdropFilter: "blur(4px)",
           }}
         >
           {performer.badge}
         </div>
-        <div style={{ position: "absolute", bottom: "14px", left: "14px" }}>
+        <div style={{ position: "absolute", bottom: "14px", left: "14px", right: "14px" }}>
           <p
-            style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.textSec }}
+            style={{
+              margin: 0,
+              fontSize: "11px",
+              letterSpacing: "2px",
+              textTransform: "uppercase",
+              color: "#f0d8d8",
+              textShadow: "0 1px 6px rgba(0,0,0,0.9)",
+            }}
           >
             {performer.origin}
           </p>
-          <h3 style={{ margin: "2px 0 0", fontSize: "17px", fontWeight: "bold", color: "#fff" }}>{performer.name}</h3>
+          <h3
+            style={{
+              margin: "2px 0 0",
+              fontSize: "22px",
+              fontWeight: "bold",
+              color: "#fff",
+              textShadow: "0 2px 12px rgba(0,0,0,0.95), 0 1px 3px rgba(192,0,10,0.4)",
+              letterSpacing: "-0.3px",
+            }}
+          >
+            {performer.name}
+          </h3>
         </div>
       </div>
 
@@ -1027,7 +1047,17 @@ function App() {
           loop
           muted
           playsInline
+          preload="auto"
           poster={heroCover}
+          disableRemotePlayback
+          ref={(el) => {
+            if (el) {
+              el.muted = true;
+              const tryPlay = () => el.play().catch(() => {});
+              tryPlay();
+              el.addEventListener("loadedmetadata", tryPlay, { once: true });
+            }
+          }}
           style={{
             position: "absolute",
             inset: 0,
