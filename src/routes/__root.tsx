@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import ogImage from "../assets/hero-cover.jpg";
 
 function NotFoundComponent() {
   return (
@@ -29,18 +30,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Catalogue du Quartier Rouge" },
-      { name: "description", content: "Catalogue Officiel pour ma Little Shit by Boite 📦" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Catalogue du Quartier Rouge" },
-      { property: "og:description", content: "Catalogue Officiel pour ma Little Shit by Boite 📦" },
+      { title: "Catalogue du Quartier Rouge — Saison 2026" },
+      { name: "description", content: "Catalogue officiel du Quartier Rouge : professionnelles vérifiées, tarifs transparents, réservation discrète." },
+      { name: "author", content: "Quartier Rouge" },
+      { property: "og:title", content: "Catalogue du Quartier Rouge — Saison 2026" },
+      { property: "og:description", content: "Les plus belles vitrines du Quartier Rouge, derrière une seule porte." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Catalogue du Quartier Rouge" },
-      { name: "twitter:description", content: "Catalogue Officiel pour ma Little Shit by Boite 📦" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/93ffa3e6-bec0-4d4c-a8bc-b9940194252b" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/93ffa3e6-bec0-4d4c-a8bc-b9940194252b" },
+      { name: "twitter:title", content: "Catalogue du Quartier Rouge — Saison 2026" },
+      { name: "twitter:description", content: "Les plus belles vitrines du Quartier Rouge, derrière une seule porte." },
+      { property: "og:image", content: ogImage },
+      { name: "twitter:image", content: ogImage },
     ],
     links: [
       {
