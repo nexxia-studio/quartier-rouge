@@ -1023,12 +1023,30 @@ function App() {
         <video
           ref={(el) => {
             if (!el) return;
+            // iOS Safari requires these attributes set directly on the DOM node
             el.muted = true;
-            const tryPlay = () => el.play().catch(() => {});
+            el.defaultMuted = true;
+            el.setAttribute("muted", "");
+            el.setAttribute("playsinline", "");
+            el.setAttribute("webkit-playsinline", "");
+            el.setAttribute("autoplay", "");
+            el.setAttribute("x5-playsinline", "");
+            const tryPlay = () => {
+              const p = el.play();
+              if (p && typeof p.catch === "function") p.catch(() => {});
+            };
             tryPlay();
             el.addEventListener("loadedmetadata", tryPlay, { once: true });
+            el.addEventListener("canplay", tryPlay, { once: true });
+            // Resume on first user interaction (iOS low-power mode fallback)
+            const resume = () => {
+              tryPlay();
+              document.removeEventListener("touchstart", resume);
+              document.removeEventListener("click", resume);
+            };
+            document.addEventListener("touchstart", resume, { once: true, passive: true });
+            document.addEventListener("click", resume, { once: true });
           }}
-          src={heroVideoAsset.url}
           poster={heroCover}
           autoPlay
           muted
@@ -1045,7 +1063,9 @@ function App() {
             objectFit: "cover",
             zIndex: 0,
           }}
-        />
+        >
+          <source src={heroVideoAsset.url} type="video/mp4" />
+        </video>
         <div
           style={{
             position: "absolute",
