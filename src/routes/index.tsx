@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import perf1 from "@/assets/perf-1.jpg";
 import perf2 from "@/assets/perf-2.jpg";
 import perf3 from "@/assets/perf-3.jpg";
@@ -126,7 +126,7 @@ function PerformerModal({ performer, onClose }: { performer: Performer | null; o
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: "20px", maxWidth: "680px", width: "100%", maxHeight: "90vh", overflowY: "auto", fontFamily: "'Georgia', serif" }}>
         <div style={{ position: "relative", height: "260px", borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
-          <img src={performer.photo} alt={performer.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.75) saturate(0.7)" }} />
+          <img src={performer.photo} alt={performer.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", filter: "brightness(0.75) saturate(0.7)" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,0,0,0.95) 0%, transparent 55%)" }} />
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: T.red }} />
           <div style={{ position: "absolute", bottom: "24px", left: "28px", color: T.textPrim }}>
@@ -216,7 +216,7 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
       onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = T.border; }}
     >
       <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
-        <img src={performer.photo} alt={performer.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.7) saturate(0.6)" }} />
+        <img src={performer.photo} alt={performer.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", filter: "brightness(0.7) saturate(0.6)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,0,0,0.92) 0%, transparent 55%)" }} />
         <div style={{ position: "absolute", top: "12px", right: "12px", background: performer.available ? "rgba(0,60,20,0.85)" : "rgba(60,0,0,0.85)", border: `1px solid ${performer.available ? "#1a5a30" : T.redDim}`, color: performer.available ? "#4ade80" : T.red, borderRadius: "999px", padding: "4px 10px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>
           {performer.available ? "● DISPONIBLE" : "● INDISPONIBLE"}
@@ -251,6 +251,18 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
   );
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 860px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return isMobile;
+}
+
 function App() {
   const [selectedPerformer, setSelectedPerformer] = useState<Performer | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -259,6 +271,8 @@ function App() {
   const [availableOnly, setAvailableOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState(20000);
   const [sortBy, setSortBy] = useState("rating");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const toggleFilter = (arr: string[], setArr: (v: string[]) => void, value: string) => {
     setArr(arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]);
@@ -295,90 +309,121 @@ function App() {
     transition: "all 0.15s",
   });
 
+  const activeFilterCount =
+    selectedOrigins.length + selectedTags.length + (availableOnly ? 1 : 0) + (maxPrice < 20000 ? 1 : 0);
+
+  const FiltersPanel = (
+    <>
+      <h2 style={{ fontSize: "13px", fontWeight: 600, margin: "0 0 20px", color: T.textSec, letterSpacing: "2px", textTransform: "uppercase" }}>Filtres</h2>
+
+      <div style={{ marginBottom: "24px" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontSize: "14px", color: T.textSec }}>
+          <input type="checkbox" checked={availableOnly} onChange={() => setAvailableOnly(!availableOnly)} style={{ width: "16px", height: "16px", accentColor: T.red }} />
+          Disponibles uniquement
+        </label>
+      </div>
+
+      <div style={{ marginBottom: "24px" }}>
+        <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Trier par</p>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ width: "100%", padding: "8px 12px", borderRadius: "8px", border: `1px solid ${T.border}`, fontSize: "13px", color: T.textSec, background: T.bgInput, cursor: "pointer" }}>
+          <option value="rating">Meilleure note</option>
+          <option value="reviews">Plus d'avis</option>
+          <option value="price_asc">Prix croissant</option>
+          <option value="price_desc">Prix décroissant</option>
+        </select>
+      </div>
+
+      <div style={{ marginBottom: "24px" }}>
+        <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Budget max</p>
+        <input type="range" min={0} max={20000} step={100} value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} style={{ width: "100%", accentColor: T.red }} />
+        <p style={{ margin: "6px 0 0", fontSize: "13px", color: T.textSec, textAlign: "right" }}>≤ {maxPrice.toLocaleString("fr-BE")} €</p>
+      </div>
+
+      <div style={{ height: "1px", background: T.border, marginBottom: "20px" }} />
+
+      <div style={{ marginBottom: "24px" }}>
+        <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Origine</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          {ALL_ORIGINS.map((o) => (
+            <button key={o} onClick={() => toggleFilter(selectedOrigins, setSelectedOrigins, o)} style={filterPillStyle(selectedOrigins.includes(o))}>{o}</button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Spécialités</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          {ALL_TAGS.map((t) => (
+            <button key={t} onClick={() => toggleFilter(selectedTags, setSelectedTags, t)} style={filterPillStyle(selectedTags.includes(t))}>{t}</button>
+          ))}
+        </div>
+      </div>
+
+      {activeFilterCount > 0 && (
+        <button onClick={() => { setSelectedOrigins([]); setSelectedTags([]); setAvailableOnly(false); setMaxPrice(20000); }} style={{ marginTop: "20px", width: "100%", padding: "10px", background: "transparent", border: `1px solid ${T.border}`, borderRadius: "8px", fontSize: "13px", color: T.textSec, cursor: "pointer" }}>
+          Réinitialiser les filtres
+        </button>
+      )}
+    </>
+  );
+
   return (
     <div style={{ minHeight: "100vh", background: T.bg, fontFamily: "'Georgia', serif" }}>
-      <header style={{ background: "#080808", borderBottom: `1px solid ${T.border}`, padding: "52px 40px 44px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <header style={{ background: "#080808", borderBottom: `1px solid ${T.border}`, padding: isMobile ? "36px 20px 28px" : "52px 40px 44px", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "600px", height: "200px", borderRadius: "50%", background: "radial-gradient(ellipse, rgba(192,0,10,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <p style={{ margin: "0 0 10px", fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.textDim, position: "relative" }}>Catalogue Officiel · Saison 2025</p>
-        <h1 style={{ margin: "0 0 6px", fontSize: "clamp(36px, 6vw, 68px)", fontWeight: "bold", lineHeight: 1.05, color: "#fff", letterSpacing: "-1px", position: "relative" }}>Quartier Rouge</h1>
+        <p style={{ margin: "0 0 10px", fontSize: isMobile ? "10px" : "11px", letterSpacing: isMobile ? "3px" : "5px", textTransform: "uppercase", color: T.textDim, position: "relative" }}>Catalogue Officiel · Saison 2025</p>
+        <h1 style={{ margin: "0 0 6px", fontSize: "clamp(34px, 9vw, 68px)", fontWeight: "bold", lineHeight: 1.05, color: "#fff", letterSpacing: "-1px", position: "relative" }}>Quartier Rouge</h1>
         <div style={{ width: "60px", height: "3px", background: T.red, margin: "0 auto 18px", position: "relative" }} />
-        <p style={{ margin: "0 0 36px", fontSize: "16px", color: T.textSec, fontStyle: "italic", position: "relative" }}>« Les plus belles vitrines du Quartier Rouge, derrière une seule porte »</p>
+        <p style={{ margin: isMobile ? "0 0 24px" : "0 0 36px", fontSize: isMobile ? "14px" : "16px", color: T.textSec, fontStyle: "italic", position: "relative", padding: "0 8px" }}>« Les plus belles vitrines du Quartier Rouge, derrière une seule porte »</p>
 
         <div style={{ maxWidth: "520px", margin: "0 auto", position: "relative" }}>
           <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: T.textDim, fontSize: "16px" }}>🔍</span>
-          <input type="text" placeholder="Rechercher une professionnelle, une spécialité..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: "100%", padding: "14px 14px 14px 46px", borderRadius: "12px", border: `1px solid ${T.border}`, fontSize: "15px", background: T.bgInput, color: T.textPrim, outline: "none", boxSizing: "border-box" }} />
+          <input type="text" placeholder="Rechercher..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: "100%", padding: "14px 14px 14px 46px", borderRadius: "12px", border: `1px solid ${T.border}`, fontSize: "15px", background: T.bgInput, color: T.textPrim, outline: "none", boxSizing: "border-box" }} />
         </div>
       </header>
 
-      <div style={{ display: "flex", maxWidth: "1280px", margin: "0 auto", padding: "32px 24px", gap: "28px", alignItems: "flex-start" }}>
-        <aside style={{ width: "260px", flexShrink: 0, background: T.bgSide, borderRadius: "16px", border: `1px solid ${T.border}`, padding: "24px", position: "sticky", top: "24px" }}>
-          <h2 style={{ fontSize: "13px", fontWeight: 600, margin: "0 0 20px", color: T.textSec, letterSpacing: "2px", textTransform: "uppercase" }}>Filtres</h2>
+      <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "20px 16px" : "32px 24px", gap: isMobile ? "16px" : "28px", alignItems: "flex-start" }}>
 
-          <div style={{ marginBottom: "24px" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontSize: "14px", color: T.textSec }}>
-              <input type="checkbox" checked={availableOnly} onChange={() => setAvailableOnly(!availableOnly)} style={{ width: "16px", height: "16px", accentColor: T.red }} />
-              Disponibles uniquement
-            </label>
-          </div>
+        {/* Mobile: filter button */}
+        {isMobile && (
+          <button
+            onClick={() => setFiltersOpen(true)}
+            style={{
+              width: "100%", padding: "12px", borderRadius: "10px",
+              background: T.bgSide, border: `1px solid ${T.border}`,
+              color: T.textPrim, fontSize: "14px", cursor: "pointer",
+              fontFamily: "'Georgia', serif", display: "flex",
+              alignItems: "center", justifyContent: "center", gap: "8px",
+            }}
+          >
+            ⚙️ Filtres {activeFilterCount > 0 && (
+              <span style={{ background: T.red, color: "#fff", borderRadius: "999px", padding: "1px 8px", fontSize: "11px", fontWeight: 700 }}>{activeFilterCount}</span>
+            )}
+          </button>
+        )}
 
-          <div style={{ marginBottom: "24px" }}>
-            <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Trier par</p>
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ width: "100%", padding: "8px 12px", borderRadius: "8px", border: `1px solid ${T.border}`, fontSize: "13px", color: T.textSec, background: T.bgInput, cursor: "pointer" }}>
-              <option value="rating">Meilleure note</option>
-              <option value="reviews">Plus d'avis</option>
-              <option value="price_asc">Prix croissant</option>
-              <option value="price_desc">Prix décroissant</option>
-            </select>
-          </div>
+        {/* Desktop sidebar */}
+        {!isMobile && (
+          <aside style={{ width: "260px", flexShrink: 0, background: T.bgSide, borderRadius: "16px", border: `1px solid ${T.border}`, padding: "24px", position: "sticky", top: "24px" }}>
+            {FiltersPanel}
+          </aside>
+        )}
 
-          <div style={{ marginBottom: "24px" }}>
-            <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Budget max</p>
-            <input type="range" min={0} max={20000} step={100} value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} style={{ width: "100%", accentColor: T.red }} />
-            <p style={{ margin: "6px 0 0", fontSize: "13px", color: T.textSec, textAlign: "right" }}>≤ {maxPrice.toLocaleString("fr-BE")} €</p>
-          </div>
-
-          <div style={{ height: "1px", background: T.border, marginBottom: "20px" }} />
-
-          <div style={{ marginBottom: "24px" }}>
-            <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Origine</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-              {ALL_ORIGINS.map((o) => (
-                <button key={o} onClick={() => toggleFilter(selectedOrigins, setSelectedOrigins, o)} style={filterPillStyle(selectedOrigins.includes(o))}>{o}</button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: "1.5px" }}>Spécialités</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-              {ALL_TAGS.map((t) => (
-                <button key={t} onClick={() => toggleFilter(selectedTags, setSelectedTags, t)} style={filterPillStyle(selectedTags.includes(t))}>{t}</button>
-              ))}
-            </div>
-          </div>
-
-          {(selectedOrigins.length > 0 || selectedTags.length > 0 || availableOnly || maxPrice < 20000) && (
-            <button onClick={() => { setSelectedOrigins([]); setSelectedTags([]); setAvailableOnly(false); setMaxPrice(20000); }} style={{ marginTop: "20px", width: "100%", padding: "8px", background: "transparent", border: `1px solid ${T.border}`, borderRadius: "8px", fontSize: "13px", color: T.textSec, cursor: "pointer" }}>
-              Réinitialiser les filtres
-            </button>
-          )}
-        </aside>
-
-        <main style={{ flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
+        <main style={{ flex: 1, width: "100%", minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
             <p style={{ margin: 0, fontSize: "14px", color: T.textSec }}>
               <strong style={{ color: T.red }}>{filtered.length}</strong> professionnelle{filtered.length !== 1 ? "s" : ""} trouvée{filtered.length !== 1 ? "s" : ""}
             </p>
           </div>
 
           {filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "80px 20px", color: T.textDim }}>
+            <div style={{ textAlign: "center", padding: "60px 20px", color: T.textDim }}>
               <p style={{ fontSize: "48px", marginBottom: "16px" }}>🌹</p>
               <p style={{ fontSize: "18px", fontStyle: "italic", color: T.textSec }}>Aucune professionnelle ne correspond à vos critères.</p>
               <p style={{ fontSize: "14px" }}>Essayez d'élargir vos filtres.</p>
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(260px, 1fr))", gap: isMobile ? "16px" : "24px" }}>
               {filtered.map((m) => (
                 <PerformerCard key={m.id} performer={m} onSelect={setSelectedPerformer} />
               ))}
@@ -386,6 +431,29 @@ function App() {
           )}
         </main>
       </div>
+
+      {/* Mobile filter drawer */}
+      {isMobile && filtersOpen && (
+        <div
+          onClick={() => setFiltersOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 1100, display: "flex", justifyContent: "flex-end" }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "min(86vw, 340px)", height: "100%", overflowY: "auto",
+              background: T.bgSide, borderLeft: `1px solid ${T.border}`,
+              padding: "24px", fontFamily: "'Georgia', serif",
+              animation: "slideIn 0.2s ease-out",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "12px" }}>
+              <button onClick={() => setFiltersOpen(false)} style={{ background: "transparent", border: `1px solid ${T.border}`, borderRadius: "50%", width: "32px", height: "32px", color: T.textSec, cursor: "pointer", fontSize: "16px" }}>✕</button>
+            </div>
+            {FiltersPanel}
+          </div>
+        </div>
+      )}
 
       <PerformerModal performer={selectedPerformer} onClose={() => setSelectedPerformer(null)} />
 
@@ -396,3 +464,4 @@ function App() {
     </div>
   );
 }
+
