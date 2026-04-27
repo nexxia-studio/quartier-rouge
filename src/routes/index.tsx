@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
+import heroCover from "@/assets/hero-cover.jpg";
 import perf1 from "@/assets/perf-1.jpg";
 import perf2 from "@/assets/perf-2.jpg";
 import perf3 from "@/assets/perf-3.jpg";
