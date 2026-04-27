@@ -1116,6 +1116,63 @@ function App() {
         </div>
       </header>
 
+      {/* CTA section */}
+      <section
+        style={{
+          background: T.bgSide,
+          borderBottom: `1px solid ${T.border}`,
+          padding: isMobile ? "28px 20px" : "40px 24px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ maxWidth: "560px", margin: "0 auto", position: "relative" }}>
+          <span
+            style={{
+              position: "absolute",
+              left: "16px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: T.textDim,
+              fontSize: "16px",
+            }}
+          >
+            🔍
+          </span>
+          <input
+            type="text"
+            placeholder="Rechercher une professionnelle..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "14px 14px 14px 46px",
+              borderRadius: "12px",
+              border: `1px solid ${T.border}`,
+              fontSize: "15px",
+              background: T.bgInput,
+              color: T.textPrim,
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: isMobile ? "10px" : "16px",
+            marginTop: "18px",
+            fontSize: isMobile ? "12px" : "13px",
+            color: T.textSec,
+          }}
+        >
+          <span>🔒 100% Discret</span>
+          <span>✓ Profils vérifiés</span>
+          <span>💸 Tarifs transparents</span>
+        </div>
+      </section>
+
       <div
         style={{
           display: "flex",
