@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
+import perf1 from "@/assets/perf-1.jpg";
+import perf2 from "@/assets/perf-2.jpg";
+import perf3 from "@/assets/perf-3.jpg";
+import perf4 from "@/assets/perf-4.jpg";
+import perf5 from "@/assets/perf-5.jpg";
+import perf6 from "@/assets/perf-6.jpg";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -8,38 +14,86 @@ export const Route = createFileRoute("/")({
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
 const SERVICES = [
-  { id: "s01", label: "Danse Privée", description: "Canal Érotique – Spectacle intime au bord du canal", icon: "🃏", category: "Danse", prices: { 15: 80, 30: 140, 60: 250 } },
-  { id: "s02", label: "Lapdance", description: "Velvet Shadow – Danse rapprochée dans une ambiance tamisée", icon: "🔮", category: "Danse", prices: { 15: 120, 30: 200, 60: 360 } },
-  { id: "s03", label: "Chevauchée Amsterdam", description: "Cowgirl complète avec vue sur le client", icon: "🎭", category: "Danse", prices: { 15: 400, 30: 700, 60: 1200 } },
-  { id: "s04", label: "Anal Red Light", description: "Pénétration anale sensuelle et progressive", icon: "🤹", category: "Sexe", prices: { 15: 60, 30: 100, 60: 180 } },
+  { id: "s01", label: "Danse Privée", description: "Canal Érotique – Spectacle intime au bord du canal", icon: "💃", category: "Danse", prices: { 15: 80, 30: 140, 60: 250 } },
+  { id: "s02", label: "Lapdance", description: "Velvet Shadow – Danse rapprochée dans une ambiance tamisée", icon: "👯", category: "Danse", prices: { 15: 120, 30: 200, 60: 360 } },
+  { id: "s03", label: "Chevauchée Amsterdam", description: "Cowgirl complète avec vue sur le client", icon: "🍑", category: "Danse", prices: { 15: 400, 30: 700, 60: 1200 } },
+  { id: "s04", label: "Anal Red Light", description: "Pénétration anale sensuelle et progressive", icon: "🔞", category: "Sexe", prices: { 15: 60, 30: 100, 60: 180 } },
   { id: "s05", label: "Double Plaisir", description: "Double pénétration (doigts + jouet ou client + jouet)", icon: "🔥", category: "Sexe", prices: { 15: 150, 30: 260, 60: 460 } },
-  { id: "s06", label: "69 Canal", description: "Position 69 prolongée avec jeux de langue.", icon: "🔪", category: "Sexe", prices: { 15: 180, 30: 300, 60: 520 } },
-  { id: "s07", label: "Dutch Deepthroat", description: "Plaisir manuel intense sans se soucier de votre plaisir", icon: "🐇", category: "Sexe", prices: { 15: 200, 30: 340, 60: 600 } },
-  { id: "s08", label: "Éjac Faciale Amsterdam", description: "Finitions faciales ou corps avec option avaler", icon: "🎈", category: "Sexe", prices: { 15: 70, 30: 120, 60: 200 } },
-  { id: "s09", label: "Chevauchée Amsterdam", description: "Cowgirl complète en équipe", icon: "🎤", category: "Sexe à 3", prices: { 15: 350, 30: 600, 60: 1000 } },
-  { id: "s10", label: "Escape game & team building", description: "Animation groupe autour de la magie et du mystère.", icon: "🗝️", category: "Sexe à 3", prices: { 15: 300, 30: 500, 60: 850 } },
+  { id: "s06", label: "69 Canal", description: "Position 69 prolongée avec jeux de langue.", icon: "👅", category: "Sexe", prices: { 15: 180, 30: 300, 60: 520 } },
+  { id: "s07", label: "Dutch Deepthroat", description: "Plaisir manuel intense sans se soucier de votre plaisir", icon: "💋", category: "Sexe", prices: { 15: 200, 30: 340, 60: 600 } },
+  { id: "s08", label: "Éjac Faciale Amsterdam", description: "Finitions faciales ou corps avec option avaler", icon: "💦", category: "Sexe", prices: { 15: 70, 30: 120, 60: 200 } },
+  { id: "s09", label: "Chevauchée Amsterdam", description: "Cowgirl complète en équipe", icon: "👠", category: "Sexe à 3", prices: { 15: 350, 30: 600, 60: 1000 } },
+  { id: "s10", label: "Trio Red Light", description: "Soirée en trio dans une suite privée du Quartier Rouge", icon: "🍒", category: "Sexe à 3", prices: { 15: 300, 30: 500, 60: 850 } },
 ] as const;
 
 type Service = (typeof SERVICES)[number];
 const SERVICES_MAP: Record<string, Service> = Object.fromEntries(SERVICES.map((s) => [s.id, s]));
 
-type Magician = {
+type Performer = {
   id: number; name: string; alias: string; origin: string; location: string;
-  avatar: string; photo: string; available: boolean; rating: number; reviews: number;
+  photo: string; available: boolean; rating: number; reviews: number;
   badge: string; tags: string[]; serviceIds: string[]; bio: string; warning: string | null;
 };
 
-const MAGICIANS: Magician[] = [
-  { id: 1, name: "Lola Velvet", alias: "La Maîtresse des Colombes", origin: "Espagnol", location: "Séville / Tournée mondiale", avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=magnifico&backgroundColor=ffd700", photo: "https://images.unsplash.com/photo-1627389955646-6596047473d7?w=400&h=500&fit=crop", available: true, rating: 4.9, reviews: 312, badge: "⭐ Best-seller", tags: ["Magie classique", "Animaux", "Scène"], serviceIds: ["s01", "s03", "s04", "s05", "s07"], bio: "Formé à la prestigieuse École Nationale de Magie de Séville, Magnifico jongle littéralement avec les oiseaux depuis l'âge de 7 ans.", warning: "⚠️ Ne pas réserver si allergie aux plumes." },
-  { id: 2, name: "Vicky Vorace", alias: "L'Illusionniste du Dimanche", origin: "Belge", location: "Liège et alentours (max 20km)", avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=kevin&backgroundColor=c0c0c0", photo: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=400&h=500&fit=crop", available: true, rating: 3.2, reviews: 47, badge: "💶 Petit budget", tags: ["Magie de proximité", "Jonglage", "Anniversaires"], serviceIds: ["s01", "s04", "s08"], bio: "Kevin a découvert la magie en regardant Cyril le Magicien à la télé en 2003.", warning: "⚠️ Remboursement non garanti en cas d'échec du tour." },
-  { id: 3, name: "Ruby Ride", alias: "La Voyante des Illusions", origin: "Pakistanaise", location: "Bruxelles", avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=zara&backgroundColor=9b59b6", photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=500&fit=crop", available: true, rating: 4.7, reviews: 189, badge: "🔮 Mystique", tags: ["Magie mystique", "Lecture d'esprit", "Gala"], serviceIds: ["s02", "s03", "s01"], bio: "Descendante d'une lignée de prestidigitateurs fondée à Lahore en 1887.", warning: null },
-  { id: 4, name: "Lola Deepthroat", alias: "La Magicienne Corporatif", origin: "Américaine", location: "Paris / Lyon / Déplacements facturés", avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=jeanmichel&backgroundColor=3498db", photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=500&fit=crop", available: false, rating: 4.1, reviews: 98, badge: "💼 Corporate", tags: ["Magie corporate", "Team building", "Conférence"], serviceIds: ["s09", "s10", "s02", "s01"], bio: "Ancien consultant McKinsey reconverti dans la magie après un burnout inspirant.", warning: "⚠️ Indisponible en août (vacances au Touquet)." },
-  { id: 5, name: "Scarlett Squirt", alias: "La Jongleuse de Galway", origin: "Irlandais", location: "Dublin / Europe", avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=obrien&backgroundColor=2ecc71", photo: "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=400&h=500&fit=crop", available: true, rating: 4.8, reviews: 234, badge: "🍀 Coup de cœur", tags: ["Jonglage", "Festival", "Cirque"], serviceIds: ["s04", "s05", "s06"], bio: "Champion d'Europe de jonglage 2019 et 2021.", warning: "⚠️ Couteaux non inclus dans le prix." },
-  { id: 6, name: "Kira Kink", alias: "Sensei de l'Impossible", origin: "Japonais", location: "Tokyo / International", avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=takeshi&backgroundColor=e74c3c", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop", available: true, rating: 5.0, reviews: 501, badge: "🏆 Premium", tags: ["Magie classique", "Scène", "Gala", "Illusions grandes scènes"], serviceIds: ["s03", "s02", "s07", "s09"], bio: "Formé 12 ans dans un temple de Kyoto.", warning: null },
+const PERFORMERS: Performer[] = [
+  {
+    id: 1, name: "Lola Velvet", alias: "La Reine du Canal Érotique", origin: "Espagnole",
+    location: "Amsterdam – Vitrine Oudezijds Achterburgwal", photo: perf1,
+    available: true, rating: 4.9, reviews: 312, badge: "⭐ Best-seller",
+    tags: ["Sensualité latine", "GFE", "Domination douce"],
+    serviceIds: ["s01", "s03", "s04", "s05", "s07"],
+    bio: "Formée aux cabarets de Séville avant de poser ses talons à Amsterdam, Lola règne sur sa vitrine du Canal depuis 2018. Une présence magnétique, un sens du rythme rare et une capacité à mettre n'importe quel client à l'aise dès la porte refermée.",
+    warning: "⚠️ Pas de baisers profonds sans hygiène irréprochable.",
+  },
+  {
+    id: 2, name: "Vicky Vorace", alias: "La Belge Sans Tabou", origin: "Belge",
+    location: "Liège – Quartier Cathédrale Nord", photo: perf2,
+    available: true, rating: 3.2, reviews: 47, badge: "💶 Petit budget",
+    tags: ["Débutante motivée", "Tarifs doux", "Local"],
+    serviceIds: ["s01", "s04", "s08"],
+    bio: "Vicky débarque dans le métier après 2 ans en peep-show à Bruxelles. Les avis sont mitigés mais le tarif est imbattable. Elle apporte sa propre playlist, parfois un peu datée.",
+    warning: "⚠️ Pas de remboursement en cas de finition prématurée.",
+  },
+  {
+    id: 3, name: "Ruby Ride", alias: "L'Exotique de Bruxelles", origin: "Pakistanaise",
+    location: "Bruxelles – Quartier Nord", photo: perf3,
+    available: true, rating: 4.7, reviews: 189, badge: "🔥 Sensation",
+    tags: ["Massage tantrique", "GFE", "VIP"],
+    serviceIds: ["s02", "s03", "s01"],
+    bio: "Ruby mêle l'art du massage oriental à un sens aigu du spectacle. Réputée pour ses lapdances envoûtantes et son contact peau à peau d'une douceur rare. Discrétion absolue garantie.",
+    warning: null,
+  },
+  {
+    id: 4, name: "Lola Deepthroat", alias: "L'Américaine VIP", origin: "Américaine",
+    location: "Paris / Lyon – Hôtels 5★", photo: perf4,
+    available: false, rating: 4.1, reviews: 98, badge: "💼 High-class",
+    tags: ["Escorte de luxe", "Soirées privées", "Trio"],
+    serviceIds: ["s09", "s10", "s02", "s01"],
+    bio: "Ex-modèle reconvertie dans l'accompagnement haut de gamme, Lola accompagne dîners d'affaires, soirées privées et week-ends en suite. Anglais et français parfaits, parle aussi business.",
+    warning: "⚠️ Indisponible en août (vacances à Mykonos).",
+  },
+  {
+    id: 5, name: "Scarlett Squirt", alias: "La Rouquine de Galway", origin: "Irlandaise",
+    location: "Dublin / Tournées Europe", photo: perf5,
+    available: true, rating: 4.8, reviews: 234, badge: "🍀 Coup de cœur",
+    tags: ["Squirt", "Fétichisme soft", "Show duo"],
+    serviceIds: ["s04", "s05", "s06"],
+    bio: "Star montante de la scène irlandaise, Scarlett s'est fait un nom grâce à ses shows mouillés et son énergie communicative. Sait recevoir comme elle sait se déplacer.",
+    warning: "⚠️ Prévoir une serviette. Sérieusement.",
+  },
+  {
+    id: 6, name: "Kira Kink", alias: "La Maîtresse de Tokyo", origin: "Japonaise",
+    location: "Tokyo / Tournées internationales", photo: perf6,
+    available: true, rating: 5.0, reviews: 501, badge: "🏆 Premium",
+    tags: ["BDSM", "Shibari", "Domination", "Soirées privées"],
+    serviceIds: ["s03", "s02", "s07", "s09"],
+    bio: "Formée 8 ans dans les clubs spécialisés de Shinjuku, Kira est une référence mondiale du shibari et de la domination soft. Sessions sur mesure, cadre safe, débutants bienvenus.",
+    warning: null,
+  },
 ];
 
-const ALL_TAGS = [...new Set(MAGICIANS.flatMap((m) => m.tags))].sort();
-const ALL_ORIGINS = [...new Set(MAGICIANS.map((m) => m.origin))].sort();
+const ALL_TAGS = [...new Set(PERFORMERS.flatMap((m) => m.tags))].sort();
+const ALL_ORIGINS = [...new Set(PERFORMERS.map((m) => m.origin))].sort();
 const DURATIONS = [
   { minutes: 15 as const, label: "15 min" },
   { minutes: 30 as const, label: "30 min" },
@@ -63,24 +117,24 @@ function Stars({ rating }: { rating: number }) {
   );
 }
 
-function MagicianModal({ magician, onClose }: { magician: Magician | null; onClose: () => void }) {
+function PerformerModal({ performer, onClose }: { performer: Performer | null; onClose: () => void }) {
   const [selectedDuration, setSelectedDuration] = useState<15 | 30 | 60>(30);
-  if (!magician) return null;
-  const magicianServices = magician.serviceIds.map((id) => SERVICES_MAP[id]);
+  if (!performer) return null;
+  const performerServices = performer.serviceIds.map((id) => SERVICES_MAP[id]);
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: "20px", maxWidth: "680px", width: "100%", maxHeight: "90vh", overflowY: "auto", fontFamily: "'Georgia', serif" }}>
         <div style={{ position: "relative", height: "260px", borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
-          <img src={magician.photo} alt={magician.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.75) saturate(0.7)" }} />
+          <img src={performer.photo} alt={performer.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.75) saturate(0.7)" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,0,0,0.95) 0%, transparent 55%)" }} />
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: T.red }} />
           <div style={{ position: "absolute", bottom: "24px", left: "28px", color: T.textPrim }}>
-            <p style={{ margin: 0, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.textSec }}>{magician.origin} · {magician.location}</p>
-            <h2 style={{ margin: "4px 0 2px", fontSize: "28px", fontWeight: "bold", color: "#fff" }}>{magician.name}</h2>
-            <p style={{ margin: 0, fontSize: "15px", fontStyle: "italic", color: T.textSec }}>« {magician.alias} »</p>
+            <p style={{ margin: 0, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.textSec }}>{performer.origin} · {performer.location}</p>
+            <h2 style={{ margin: "4px 0 2px", fontSize: "28px", fontWeight: "bold", color: "#fff" }}>{performer.name}</h2>
+            <p style={{ margin: 0, fontSize: "15px", fontStyle: "italic", color: T.textSec }}>« {performer.alias} »</p>
           </div>
-          {!magician.available && (
+          {!performer.available && (
             <div style={{ position: "absolute", top: "20px", right: "20px", background: "#3a0000", border: `1px solid ${T.redDim}`, color: T.red, borderRadius: "999px", padding: "6px 16px", fontSize: "12px", fontWeight: 700, letterSpacing: "1px" }}>INDISPONIBLE</div>
           )}
           <button onClick={onClose} style={{ position: "absolute", top: "16px", left: "16px", background: "rgba(0,0,0,0.5)", border: `1px solid ${T.border}`, borderRadius: "50%", width: "36px", height: "36px", cursor: "pointer", color: T.textSec, fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
@@ -88,19 +142,19 @@ function MagicianModal({ magician, onClose }: { magician: Magician | null; onClo
 
         <div style={{ padding: "28px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
-            <Stars rating={magician.rating} />
-            <span style={{ fontSize: "13px", color: T.textSec }}>{magician.rating}/5 · {magician.reviews} avis</span>
-            <span style={{ marginLeft: "auto", background: "#1a1000", border: `1px solid #3a2800`, color: T.gold, borderRadius: "999px", padding: "4px 12px", fontSize: "12px", fontWeight: 600 }}>{magician.badge}</span>
+            <Stars rating={performer.rating} />
+            <span style={{ fontSize: "13px", color: T.textSec }}>{performer.rating}/5 · {performer.reviews} avis</span>
+            <span style={{ marginLeft: "auto", background: "#1a1000", border: `1px solid #3a2800`, color: T.gold, borderRadius: "999px", padding: "4px 12px", fontSize: "12px", fontWeight: 600 }}>{performer.badge}</span>
           </div>
 
-          <p style={{ fontSize: "15px", lineHeight: 1.7, color: T.textSec, marginBottom: "20px" }}>{magician.bio}</p>
+          <p style={{ fontSize: "15px", lineHeight: 1.7, color: T.textSec, marginBottom: "20px" }}>{performer.bio}</p>
 
-          {magician.warning && (
-            <div style={{ background: "#1a0000", border: `1px solid ${T.redDim}`, borderRadius: "10px", padding: "12px 16px", fontSize: "13px", color: "#c06060", marginBottom: "24px" }}>{magician.warning}</div>
+          {performer.warning && (
+            <div style={{ background: "#1a0000", border: `1px solid ${T.redDim}`, borderRadius: "10px", padding: "12px 16px", fontSize: "13px", color: "#c06060", marginBottom: "24px" }}>{performer.warning}</div>
           )}
 
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "28px" }}>
-            {magician.tags.map((tag) => (
+            {performer.tags.map((tag) => (
               <span key={tag} style={{ background: "#1a0a0a", border: `1px solid ${T.border}`, borderRadius: "999px", padding: "4px 12px", fontSize: "12px", color: T.textSec }}>{tag}</span>
             ))}
           </div>
@@ -125,7 +179,7 @@ function MagicianModal({ magician, onClose }: { magician: Magician | null; onClo
               </tr>
             </thead>
             <tbody>
-              {magicianServices.map((s) => (
+              {performerServices.map((s) => (
                 <tr key={s.id} style={{ borderBottom: `1px solid ${T.border}` }}>
                   <td style={{ padding: "12px 0", fontSize: "14px", color: T.textPrim }}>
                     <span style={{ marginRight: "8px" }}>{s.icon}</span>{s.label}
@@ -142,8 +196,8 @@ function MagicianModal({ magician, onClose }: { magician: Magician | null; onClo
           </table>
 
           <div style={{ marginTop: "28px", display: "flex", gap: "12px" }}>
-            <button disabled={!magician.available} style={{ flex: 1, padding: "14px", borderRadius: "10px", border: "none", background: magician.available ? T.red : "#2a1a1a", color: magician.available ? "#fff" : T.textDim, fontSize: "15px", fontWeight: 600, cursor: magician.available ? "pointer" : "not-allowed", fontFamily: "'Georgia', serif", boxShadow: magician.available ? `0 0 24px ${T.redGlow}` : "none" }}>
-              {magician.available ? "✨ Réserver cette prestation" : "Indisponible actuellement"}
+            <button disabled={!performer.available} style={{ flex: 1, padding: "14px", borderRadius: "10px", border: "none", background: performer.available ? T.red : "#2a1a1a", color: performer.available ? "#fff" : T.textDim, fontSize: "15px", fontWeight: 600, cursor: performer.available ? "pointer" : "not-allowed", fontFamily: "'Georgia', serif", boxShadow: performer.available ? `0 0 24px ${T.redGlow}` : "none" }}>
+              {performer.available ? "🔥 Réserver maintenant" : "Indisponible actuellement"}
             </button>
             <button onClick={onClose} style={{ padding: "14px 20px", borderRadius: "10px", border: `1px solid ${T.border}`, background: "transparent", fontSize: "15px", cursor: "pointer", color: T.textSec, fontFamily: "'Georgia', serif" }}>Retour</button>
           </div>
@@ -153,35 +207,35 @@ function MagicianModal({ magician, onClose }: { magician: Magician | null; onClo
   );
 }
 
-function MagicianCard({ magician, onSelect }: { magician: Magician; onSelect: (m: Magician) => void }) {
-  const minPrice = Math.min(...magician.serviceIds.map((id) => SERVICES_MAP[id].prices[15]));
+function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect: (m: Performer) => void }) {
+  const minPrice = Math.min(...performer.serviceIds.map((id) => SERVICES_MAP[id].prices[15]));
 
   return (
-    <div onClick={() => onSelect(magician)} style={{ background: T.bgCard, borderRadius: "16px", overflow: "hidden", cursor: "pointer", transition: "transform 0.2s, border-color 0.2s", border: `1px solid ${T.border}`, fontFamily: "'Georgia', serif", display: "flex", flexDirection: "column" }}
+    <div onClick={() => onSelect(performer)} style={{ background: T.bgCard, borderRadius: "16px", overflow: "hidden", cursor: "pointer", transition: "transform 0.2s, border-color 0.2s", border: `1px solid ${T.border}`, fontFamily: "'Georgia', serif", display: "flex", flexDirection: "column" }}
       onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.borderColor = T.redDim; }}
       onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = T.border; }}
     >
       <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
-        <img src={magician.photo} alt={magician.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.7) saturate(0.6)" }} />
+        <img src={performer.photo} alt={performer.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.7) saturate(0.6)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,0,0,0.92) 0%, transparent 55%)" }} />
-        <div style={{ position: "absolute", top: "12px", right: "12px", background: magician.available ? "rgba(0,60,20,0.85)" : "rgba(60,0,0,0.85)", border: `1px solid ${magician.available ? "#1a5a30" : T.redDim}`, color: magician.available ? "#4ade80" : T.red, borderRadius: "999px", padding: "4px 10px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>
-          {magician.available ? "● DISPONIBLE" : "● INDISPONIBLE"}
+        <div style={{ position: "absolute", top: "12px", right: "12px", background: performer.available ? "rgba(0,60,20,0.85)" : "rgba(60,0,0,0.85)", border: `1px solid ${performer.available ? "#1a5a30" : T.redDim}`, color: performer.available ? "#4ade80" : T.red, borderRadius: "999px", padding: "4px 10px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>
+          {performer.available ? "● DISPONIBLE" : "● INDISPONIBLE"}
         </div>
-        <div style={{ position: "absolute", top: "12px", left: "12px", background: "rgba(0,0,0,0.6)", border: `1px solid ${T.border}`, color: T.gold, borderRadius: "999px", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>{magician.badge}</div>
+        <div style={{ position: "absolute", top: "12px", left: "12px", background: "rgba(0,0,0,0.6)", border: `1px solid ${T.border}`, color: T.gold, borderRadius: "999px", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>{performer.badge}</div>
         <div style={{ position: "absolute", bottom: "14px", left: "14px" }}>
-          <p style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.textSec }}>{magician.origin}</p>
-          <h3 style={{ margin: "2px 0 0", fontSize: "17px", fontWeight: "bold", color: "#fff" }}>{magician.name}</h3>
+          <p style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.textSec }}>{performer.origin}</p>
+          <h3 style={{ margin: "2px 0 0", fontSize: "17px", fontWeight: "bold", color: "#fff" }}>{performer.name}</h3>
         </div>
       </div>
 
       <div style={{ padding: "16px", flex: 1, display: "flex", flexDirection: "column" }}>
-        <p style={{ margin: "0 0 8px", fontSize: "13px", fontStyle: "italic", color: T.textSec }}>« {magician.alias} »</p>
+        <p style={{ margin: "0 0 8px", fontSize: "13px", fontStyle: "italic", color: T.textSec }}>« {performer.alias} »</p>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-          <Stars rating={magician.rating} />
-          <span style={{ fontSize: "12px", color: T.textDim }}>({magician.reviews})</span>
+          <Stars rating={performer.rating} />
+          <span style={{ fontSize: "12px", color: T.textDim }}>({performer.reviews})</span>
         </div>
         <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "14px" }}>
-          {magician.tags.slice(0, 3).map((tag) => (
+          {performer.tags.slice(0, 3).map((tag) => (
             <span key={tag} style={{ background: "#1a0a0a", border: `1px solid ${T.border}`, borderRadius: "999px", padding: "2px 8px", fontSize: "11px", color: T.textSec }}>{tag}</span>
           ))}
         </div>
@@ -198,7 +252,7 @@ function MagicianCard({ magician, onSelect }: { magician: Magician; onSelect: (m
 }
 
 function App() {
-  const [selectedMagician, setSelectedMagician] = useState<Magician | null>(null);
+  const [selectedPerformer, setSelectedPerformer] = useState<Performer | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrigins, setSelectedOrigins] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -211,9 +265,9 @@ function App() {
   };
 
   const filtered = useMemo(() => {
-    const minPriceOf = (m: Magician) => Math.min(...m.serviceIds.map((id) => SERVICES_MAP[id].prices[15]));
+    const minPriceOf = (m: Performer) => Math.min(...m.serviceIds.map((id) => SERVICES_MAP[id].prices[15]));
 
-    let list = MAGICIANS.filter((m) => {
+    let list = PERFORMERS.filter((m) => {
       const q = searchQuery.toLowerCase();
       if (q && !m.name.toLowerCase().includes(q) && !m.alias.toLowerCase().includes(q) &&
           !m.tags.some((t) => t.toLowerCase().includes(q))) return false;
@@ -248,11 +302,11 @@ function App() {
         <p style={{ margin: "0 0 10px", fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.textDim, position: "relative" }}>Catalogue Officiel · Saison 2025</p>
         <h1 style={{ margin: "0 0 6px", fontSize: "clamp(36px, 6vw, 68px)", fontWeight: "bold", lineHeight: 1.05, color: "#fff", letterSpacing: "-1px", position: "relative" }}>Quartier Rouge</h1>
         <div style={{ width: "60px", height: "3px", background: T.red, margin: "0 auto 18px", position: "relative" }} />
-        <p style={{ margin: "0 0 36px", fontSize: "16px", color: T.textSec, fontStyle: "italic", position: "relative" }}>« Les meilleurs artistes magiques du monde, à portée de budget »</p>
+        <p style={{ margin: "0 0 36px", fontSize: "16px", color: T.textSec, fontStyle: "italic", position: "relative" }}>« Les plus belles vitrines du Quartier Rouge, derrière une seule porte »</p>
 
         <div style={{ maxWidth: "520px", margin: "0 auto", position: "relative" }}>
           <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: T.textDim, fontSize: "16px" }}>🔍</span>
-          <input type="text" placeholder="Rechercher un magicien, une spécialité..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: "100%", padding: "14px 14px 14px 46px", borderRadius: "12px", border: `1px solid ${T.border}`, fontSize: "15px", background: T.bgInput, color: T.textPrim, outline: "none", boxSizing: "border-box" }} />
+          <input type="text" placeholder="Rechercher une professionnelle, une spécialité..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: "100%", padding: "14px 14px 14px 46px", borderRadius: "12px", border: `1px solid ${T.border}`, fontSize: "15px", background: T.bgInput, color: T.textPrim, outline: "none", boxSizing: "border-box" }} />
         </div>
       </header>
 
@@ -313,31 +367,31 @@ function App() {
         <main style={{ flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
             <p style={{ margin: 0, fontSize: "14px", color: T.textSec }}>
-              <strong style={{ color: T.red }}>{filtered.length}</strong> magicien{filtered.length !== 1 ? "s" : ""} trouvé{filtered.length !== 1 ? "s" : ""}
+              <strong style={{ color: T.red }}>{filtered.length}</strong> professionnelle{filtered.length !== 1 ? "s" : ""} trouvée{filtered.length !== 1 ? "s" : ""}
             </p>
           </div>
 
           {filtered.length === 0 ? (
             <div style={{ textAlign: "center", padding: "80px 20px", color: T.textDim }}>
-              <p style={{ fontSize: "48px", marginBottom: "16px" }}>🪄</p>
-              <p style={{ fontSize: "18px", fontStyle: "italic", color: T.textSec }}>Aucun magicien ne correspond à vos critères.</p>
-              <p style={{ fontSize: "14px" }}>Même la magie a ses limites.</p>
+              <p style={{ fontSize: "48px", marginBottom: "16px" }}>🌹</p>
+              <p style={{ fontSize: "18px", fontStyle: "italic", color: T.textSec }}>Aucune professionnelle ne correspond à vos critères.</p>
+              <p style={{ fontSize: "14px" }}>Essayez d'élargir vos filtres.</p>
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
               {filtered.map((m) => (
-                <MagicianCard key={m.id} magician={m} onSelect={setSelectedMagician} />
+                <PerformerCard key={m.id} performer={m} onSelect={setSelectedPerformer} />
               ))}
             </div>
           )}
         </main>
       </div>
 
-      <MagicianModal magician={selectedMagician} onClose={() => setSelectedMagician(null)} />
+      <PerformerModal performer={selectedPerformer} onClose={() => setSelectedPerformer(null)} />
 
       <footer style={{ textAlign: "center", padding: "40px 20px", borderTop: `1px solid ${T.border}`, color: T.textDim, fontSize: "13px", marginTop: "40px" }}>
         <p style={{ margin: "0 0 6px", color: T.redDim, letterSpacing: "3px", fontSize: "11px", textTransform: "uppercase" }}>Quartier Rouge</p>
-        <p style={{ margin: 0 }}>© 2025 · Tous les magiciens sont de vrais professionnels (en principe)</p>
+        <p style={{ margin: 0 }}>© 2025 · Plateforme réservée aux adultes (18+) · Discrétion et respect garantis</p>
       </footer>
     </div>
   );
