@@ -226,20 +226,20 @@ const DURATIONS = [
 ];
 
 const T = {
-  bg: "#0d0d0d",
-  bgCard: "#161616",
-  bgSide: "#111111",
-  bgInput: "#1a1a1a",
-  border: "#2a2a2a",
+  bg: "#141014",
+  bgCard: "#1f1a1d",
+  bgSide: "#181417",
+  bgInput: "#231d20",
+  border: "#3a2e33",
   borderHot: "#c0000a",
-  red: "#c0000a",
-  redBright: "#e8000f",
+  red: "#d8000c",
+  redBright: "#ff1a26",
   redDim: "#7a0006",
-  redGlow: "rgba(192,0,10,0.18)",
-  textPrim: "#f0e6e6",
-  textSec: "#8a7070",
-  textDim: "#4a3838",
-  gold: "#c8913a",
+  redGlow: "rgba(216,0,12,0.22)",
+  textPrim: "#f5ecec",
+  textSec: "#b59a9a",
+  textDim: "#7a6062",
+  gold: "#d4a14a",
 };
 
 function Stars({ rating }: { rating: number }) {
