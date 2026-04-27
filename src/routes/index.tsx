@@ -126,7 +126,7 @@ function PerformerModal({ performer, onClose }: { performer: Performer | null; o
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: "20px", maxWidth: "680px", width: "100%", maxHeight: "90vh", overflowY: "auto", fontFamily: "'Georgia', serif" }}>
         <div style={{ position: "relative", height: "260px", borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
-          <img src={performer.photo} alt={performer.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.75) saturate(0.7)" }} />
+          <img src={performer.photo} alt={performer.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", filter: "brightness(0.75) saturate(0.7)" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,0,0,0.95) 0%, transparent 55%)" }} />
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: T.red }} />
           <div style={{ position: "absolute", bottom: "24px", left: "28px", color: T.textPrim }}>
@@ -216,7 +216,7 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
       onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = T.border; }}
     >
       <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
-        <img src={performer.photo} alt={performer.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.7) saturate(0.6)" }} />
+        <img src={performer.photo} alt={performer.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", filter: "brightness(0.7) saturate(0.6)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,0,0,0.92) 0%, transparent 55%)" }} />
         <div style={{ position: "absolute", top: "12px", right: "12px", background: performer.available ? "rgba(0,60,20,0.85)" : "rgba(60,0,0,0.85)", border: `1px solid ${performer.available ? "#1a5a30" : T.redDim}`, color: performer.available ? "#4ade80" : T.red, borderRadius: "999px", padding: "4px 10px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>
           {performer.available ? "● DISPONIBLE" : "● INDISPONIBLE"}
