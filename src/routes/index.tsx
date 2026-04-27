@@ -1026,7 +1026,6 @@ function App() {
           autoPlay
           loop
           muted
-          defaultMuted
           playsInline
           preload="auto"
           poster={heroCover}
