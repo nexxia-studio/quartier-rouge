@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
+import heroCover from "@/assets/hero-cover.jpg";
 import perf1 from "@/assets/perf-1.jpg";
 import perf2 from "@/assets/perf-2.jpg";
 import perf3 from "@/assets/perf-3.jpg";
@@ -1006,68 +1008,124 @@ function App() {
     <div style={{ minHeight: "100vh", background: T.bg, fontFamily: "'Georgia', serif" }}>
       <header
         style={{
-          background: "#080808",
-          borderBottom: `1px solid ${T.border}`,
-          padding: isMobile ? "36px 20px 28px" : "52px 40px 44px",
-          textAlign: "center",
           position: "relative",
+          minHeight: isMobile ? "78vh" : "82vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderBottom: `1px solid ${T.border}`,
+          padding: isMobile ? "40px 20px" : "60px 40px",
+          textAlign: "center",
           overflow: "hidden",
+          background: "#080808",
         }}
       >
+        <video
+          ref={(el) => {
+            if (!el) return;
+            el.muted = true;
+            const tryPlay = () => el.play().catch(() => {});
+            tryPlay();
+            el.addEventListener("loadedmetadata", tryPlay, { once: true });
+          }}
+          src={heroVideoAsset.url}
+          poster={heroCover}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          // @ts-ignore
+          disableRemotePlayback
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        />
         <div
           style={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            width: "600px",
-            height: "200px",
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(192,0,10,0.12) 0%, transparent 70%)",
-            pointerEvents: "none",
+            inset: 0,
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.85) 100%)",
+            zIndex: 1,
           }}
         />
-        <p
-          style={{
-            margin: "0 0 10px",
-            fontSize: isMobile ? "10px" : "11px",
-            letterSpacing: isMobile ? "3px" : "5px",
-            textTransform: "uppercase",
-            color: T.textDim,
-            position: "relative",
-          }}
-        >
-          Catalogue non-Officiel <br />par ta Boîte préférée 📦
-          <br />Saison 2026
-        </p>
-        <h1
-          style={{
-            margin: "0 0 6px",
-            fontSize: "clamp(34px, 9vw, 68px)",
-            fontWeight: "bold",
-            lineHeight: 1.05,
-            color: "#fff",
-            letterSpacing: "-1px",
-            position: "relative",
-          }}
-        >
-          Quartier Rouge
-        </h1>
-        <div style={{ width: "60px", height: "3px", background: T.red, margin: "0 auto 18px", position: "relative" }} />
-        <p
-          style={{
-            margin: isMobile ? "0 0 24px" : "0 0 36px",
-            fontSize: isMobile ? "14px" : "16px",
-            color: T.textSec,
-            fontStyle: "italic",
-            position: "relative",
-            padding: "0 8px",
-          }}
-        >
-          « Les plus belles vitrines du Quartier Rouge, derrière une seule porte »
-        </p>
 
-        <div style={{ maxWidth: "520px", margin: "0 auto", position: "relative" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: isMobile ? "16px" : "24px",
+            right: isMobile ? "16px" : "24px",
+            background: "rgba(192,0,10,0.92)",
+            color: "#fff",
+            fontSize: "11px",
+            fontWeight: 700,
+            letterSpacing: "1.5px",
+            padding: "6px 10px",
+            borderRadius: "4px",
+            zIndex: 3,
+          }}
+        >
+          18+ ADULTS ONLY
+        </div>
+
+        <div style={{ position: "relative", zIndex: 2, maxWidth: "780px" }}>
+          <p
+            style={{
+              margin: "0 0 14px",
+              fontSize: isMobile ? "10px" : "11px",
+              letterSpacing: isMobile ? "3px" : "5px",
+              textTransform: "uppercase",
+              color: "#e8d8d8",
+            }}
+          >
+            Catalogue non-Officiel <br />par ta Boîte préférée 📦
+            <br />Saison 2026
+          </p>
+          <h1
+            style={{
+              margin: "0 0 12px",
+              fontSize: "clamp(42px, 11vw, 96px)",
+              fontWeight: "bold",
+              lineHeight: 1.02,
+              color: "#fff",
+              letterSpacing: "-1.5px",
+              textShadow: "0 4px 24px rgba(0,0,0,0.85)",
+            }}
+          >
+            Quartier Rouge
+          </h1>
+          <div style={{ width: "70px", height: "3px", background: T.red, margin: "0 auto 22px" }} />
+          <p
+            style={{
+              margin: 0,
+              fontSize: isMobile ? "15px" : "18px",
+              color: "#f0e6e6",
+              fontStyle: "italic",
+              padding: "0 8px",
+              textShadow: "0 2px 12px rgba(0,0,0,0.8)",
+            }}
+          >
+            « Les plus belles vitrines du Quartier Rouge, derrière une seule porte »
+          </p>
+        </div>
+      </header>
+
+      {/* CTA section */}
+      <section
+        style={{
+          background: T.bgSide,
+          borderBottom: `1px solid ${T.border}`,
+          padding: isMobile ? "28px 20px" : "40px 24px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ maxWidth: "560px", margin: "0 auto", position: "relative" }}>
           <span
             style={{
               position: "absolute",
@@ -1082,7 +1140,7 @@ function App() {
           </span>
           <input
             type="text"
-            placeholder="Rechercher..."
+            placeholder="Rechercher une professionnelle..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -1098,7 +1156,22 @@ function App() {
             }}
           />
         </div>
-      </header>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: isMobile ? "10px" : "16px",
+            marginTop: "18px",
+            fontSize: isMobile ? "12px" : "13px",
+            color: T.textSec,
+          }}
+        >
+          <span>🔒 100% Discret</span>
+          <span>✓ Profils vérifiés</span>
+          <span>💸 Tarifs transparents</span>
+        </div>
+      </section>
 
       <div
         style={{
