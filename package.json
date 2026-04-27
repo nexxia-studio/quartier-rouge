@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "build": "mkdir -p .output/server && [ -f .output/server/index.mjs ] || echo 'export default {};' > .output/server/index.mjs && vite build",
+    "build:dev": "mkdir -p .output/server && [ -f .output/server/index.mjs ] || echo 'export default {};' > .output/server/index.mjs && vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write ."
