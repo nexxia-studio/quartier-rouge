@@ -1026,8 +1026,19 @@ function App() {
           autoPlay
           loop
           muted
+          defaultMuted
           playsInline
+          preload="auto"
           poster={heroCover}
+          disableRemotePlayback
+          ref={(el) => {
+            if (el) {
+              el.muted = true;
+              const tryPlay = () => el.play().catch(() => {});
+              tryPlay();
+              el.addEventListener("loadedmetadata", tryPlay, { once: true });
+            }
+          }}
           style={{
             position: "absolute",
             inset: 0,
