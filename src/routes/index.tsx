@@ -6,8 +6,6 @@ import perf3 from "@/assets/perf-3.jpg";
 import perf4 from "@/assets/perf-4.jpg";
 import perf5 from "@/assets/perf-5.jpg";
 import perf6 from "@/assets/perf-6.jpg";
-import heroCover from "@/assets/hero-cover.jpg";
-import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -226,20 +224,20 @@ const DURATIONS = [
 ];
 
 const T = {
-  bg: "#141014",
-  bgCard: "#1f1a1d",
-  bgSide: "#181417",
-  bgInput: "#231d20",
-  border: "#3a2e33",
+  bg: "#0d0d0d",
+  bgCard: "#161616",
+  bgSide: "#111111",
+  bgInput: "#1a1a1a",
+  border: "#2a2a2a",
   borderHot: "#c0000a",
-  red: "#d8000c",
-  redBright: "#ff1a26",
+  red: "#c0000a",
+  redBright: "#e8000f",
   redDim: "#7a0006",
-  redGlow: "rgba(216,0,12,0.22)",
-  textPrim: "#f5ecec",
-  textSec: "#b59a9a",
-  textDim: "#7a6062",
-  gold: "#d4a14a",
+  redGlow: "rgba(192,0,10,0.18)",
+  textPrim: "#f0e6e6",
+  textSec: "#8a7070",
+  textDim: "#4a3838",
+  gold: "#c8913a",
 };
 
 function Stars({ rating }: { rating: number }) {
@@ -633,7 +631,7 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
         e.currentTarget.style.borderColor = T.border;
       }}
     >
-      <div style={{ position: "relative", height: "260px", overflow: "hidden" }}>
+      <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
         <img
           src={performer.photo}
           alt={performer.name}
@@ -643,14 +641,14 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
             height: "100%",
             objectFit: "cover",
             objectPosition: "center 20%",
-            filter: "brightness(1.05) saturate(0.95) contrast(1.05)",
+            filter: "brightness(0.7) saturate(0.6)",
           }}
         />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to top, rgba(5,0,0,0.85) 0%, rgba(5,0,0,0.15) 50%, transparent 75%)",
+            background: "linear-gradient(to top, rgba(5,0,0,0.92) 0%, transparent 55%)",
           }}
         />
         <div
@@ -658,15 +656,14 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
             position: "absolute",
             top: "12px",
             right: "12px",
-            background: performer.available ? "rgba(0,80,30,0.92)" : "rgba(80,0,0,0.92)",
+            background: performer.available ? "rgba(0,60,20,0.85)" : "rgba(60,0,0,0.85)",
             border: `1px solid ${performer.available ? "#1a5a30" : T.redDim}`,
-            color: performer.available ? "#7dffaf" : "#ff4d5a",
+            color: performer.available ? "#4ade80" : T.red,
             borderRadius: "999px",
             padding: "4px 10px",
             fontSize: "11px",
             fontWeight: 700,
             letterSpacing: "0.5px",
-            backdropFilter: "blur(4px)",
           }}
         >
           {performer.available ? "● DISPONIBLE" : "● INDISPONIBLE"}
@@ -676,43 +673,24 @@ function PerformerCard({ performer, onSelect }: { performer: Performer; onSelect
             position: "absolute",
             top: "12px",
             left: "12px",
-            background: "rgba(0,0,0,0.7)",
+            background: "rgba(0,0,0,0.6)",
             border: `1px solid ${T.border}`,
             color: T.gold,
             borderRadius: "999px",
             padding: "4px 10px",
             fontSize: "11px",
             fontWeight: 600,
-            backdropFilter: "blur(4px)",
           }}
         >
           {performer.badge}
         </div>
-        <div style={{ position: "absolute", bottom: "14px", left: "14px", right: "14px" }}>
+        <div style={{ position: "absolute", bottom: "14px", left: "14px" }}>
           <p
-            style={{
-              margin: 0,
-              fontSize: "11px",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              color: "#f0d8d8",
-              textShadow: "0 1px 6px rgba(0,0,0,0.9)",
-            }}
+            style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.textSec }}
           >
             {performer.origin}
           </p>
-          <h3
-            style={{
-              margin: "2px 0 0",
-              fontSize: "22px",
-              fontWeight: "bold",
-              color: "#fff",
-              textShadow: "0 2px 12px rgba(0,0,0,0.95), 0 1px 3px rgba(192,0,10,0.4)",
-              letterSpacing: "-0.3px",
-            }}
-          >
-            {performer.name}
-          </h3>
+          <h3 style={{ margin: "2px 0 0", fontSize: "17px", fontWeight: "bold", color: "#fff" }}>{performer.name}</h3>
         </div>
       </div>
 
@@ -1030,254 +1008,98 @@ function App() {
         style={{
           background: "#080808",
           borderBottom: `1px solid ${T.border}`,
-          padding: isMobile ? "80px 20px 36px" : "140px 40px 56px",
+          padding: isMobile ? "36px 20px 28px" : "52px 40px 44px",
           textAlign: "center",
           position: "relative",
           overflow: "hidden",
-          minHeight: isMobile ? "70vh" : "80vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
         }}
       >
-        <video
-          src={heroVideoAsset.url}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          poster={heroCover}
-          disableRemotePlayback
-          ref={(el) => {
-            if (el) {
-              el.muted = true;
-              const tryPlay = () => el.play().catch(() => {});
-              tryPlay();
-              el.addEventListener("loadedmetadata", tryPlay, { once: true });
-            }
-          }}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
-            zIndex: 0,
-            pointerEvents: "none",
-          }}
-        />
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            background: "linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.7) 55%, rgba(8,8,8,0.95) 100%)",
-            zIndex: 1,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: "600px",
+            height: "200px",
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse, rgba(192,0,10,0.12) 0%, transparent 70%)",
             pointerEvents: "none",
           }}
         />
-        <div
+        <p
           style={{
-            position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse at center, rgba(192,0,10,0.22) 0%, transparent 60%)",
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: isMobile ? "16px" : "24px",
-            right: isMobile ? "16px" : "24px",
-            background: "rgba(192,0,10,0.85)",
-            color: "#fff",
-            padding: "6px 12px",
-            fontSize: "10px",
-            letterSpacing: "2px",
+            margin: "0 0 10px",
+            fontSize: isMobile ? "10px" : "11px",
+            letterSpacing: isMobile ? "3px" : "5px",
             textTransform: "uppercase",
-            fontWeight: "bold",
-            borderRadius: "4px",
-            border: "1px solid rgba(255,255,255,0.2)",
-            zIndex: 2,
+            color: T.textDim,
+            position: "relative",
           }}
         >
-          18+ Adults Only
-        </div>
-        <div style={{ position: "relative", zIndex: 2, width: "100%", maxWidth: "900px" }}>
-          <p
+          Catalogue Non-Officiel <br>par ta Boîte préférée 📦 </br>
+          <br>Saison 2026</br>
+        </p>
+        <h1
+          style={{
+            margin: "0 0 6px",
+            fontSize: "clamp(34px, 9vw, 68px)",
+            fontWeight: "bold",
+            lineHeight: 1.05,
+            color: "#fff",
+            letterSpacing: "-1px",
+            position: "relative",
+          }}
+        >
+          Quartier Rouge
+        </h1>
+        <div style={{ width: "60px", height: "3px", background: T.red, margin: "0 auto 18px", position: "relative" }} />
+        <p
+          style={{
+            margin: isMobile ? "0 0 24px" : "0 0 36px",
+            fontSize: isMobile ? "14px" : "16px",
+            color: T.textSec,
+            fontStyle: "italic",
+            position: "relative",
+            padding: "0 8px",
+          }}
+        >
+          « Les plus belles vitrines du Quartier Rouge, derrière une seule porte »
+        </p>
+
+        <div style={{ maxWidth: "520px", margin: "0 auto", position: "relative" }}>
+          <span
             style={{
-              margin: "0 0 10px",
-              fontSize: isMobile ? "10px" : "11px",
-              letterSpacing: isMobile ? "3px" : "5px",
-              textTransform: "uppercase",
-              color: "#e8c5c5",
+              position: "absolute",
+              left: "16px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: T.textDim,
+              fontSize: "16px",
             }}
           >
-            Catalogue Officiel <br />Saison 2026
-          </p>
-          <h1
+            🔍
+          </span>
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             style={{
-              margin: "0 0 6px",
-              fontSize: "clamp(42px, 11vw, 96px)",
-              fontWeight: "bold",
-              lineHeight: 1.05,
-              color: "#fff",
-              letterSpacing: "-1px",
-              textShadow: "0 4px 30px rgba(0,0,0,0.85), 0 2px 8px rgba(192,0,10,0.4)",
+              width: "100%",
+              padding: "14px 14px 14px 46px",
+              borderRadius: "12px",
+              border: `1px solid ${T.border}`,
+              fontSize: "15px",
+              background: T.bgInput,
+              color: T.textPrim,
+              outline: "none",
+              boxSizing: "border-box",
             }}
-          >
-            Quartier Rouge
-          </h1>
-          <div style={{ width: "60px", height: "3px", background: T.red, margin: "0 auto 18px" }} />
-          <p
-            style={{
-              margin: 0,
-              fontSize: isMobile ? "14px" : "18px",
-              color: "#f0d8d8",
-              fontStyle: "italic",
-              padding: "0 8px",
-              textShadow: "0 2px 12px rgba(0,0,0,0.85)",
-            }}
-          >
-            « Les plus belles vitrines du Quartier Rouge, derrière une seule porte »
-          </p>
+          />
         </div>
       </header>
 
-      {/* ─── SECTION CTA ────────────────────────────────────────────── */}
-      <section
-        style={{
-          background: "linear-gradient(180deg, #0a0a0a 0%, #120808 100%)",
-          borderBottom: `1px solid ${T.border}`,
-          padding: isMobile ? "40px 20px" : "64px 40px",
-          textAlign: "center",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: "-40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "300px",
-            height: "120px",
-            background: "radial-gradient(ellipse, rgba(192,0,10,0.25) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div style={{ maxWidth: "720px", margin: "0 auto", position: "relative" }}>
-          <p
-            style={{
-              margin: "0 0 12px",
-              color: T.red,
-              fontSize: "11px",
-              letterSpacing: "4px",
-              textTransform: "uppercase",
-              fontWeight: "bold",
-            }}
-          >
-            ✦ Réservation Discrète ✦
-          </p>
-          <h2
-            style={{
-              margin: "0 0 14px",
-              fontSize: isMobile ? "26px" : "38px",
-              color: "#fff",
-              lineHeight: 1.2,
-              fontWeight: "bold",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            Trouvez la perle rare<br />du Quartier Rouge
-          </h2>
-          <p
-            style={{
-              margin: "0 0 28px",
-              fontSize: isMobile ? "14px" : "16px",
-              color: T.textSec,
-              lineHeight: 1.6,
-            }}
-          >
-            Parcourez notre catalogue exclusif de professionnelles vérifiées.
-            Tarifs transparents, profils détaillés, ambiance assumée.
-          </p>
-
-          <div style={{ maxWidth: "520px", margin: "0 auto 20px", position: "relative" }}>
-            <span
-              style={{
-                position: "absolute",
-                left: "16px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: T.textDim,
-                fontSize: "16px",
-              }}
-            >
-              🔍
-            </span>
-            <input
-              type="text"
-              placeholder="Rechercher une professionnelle, un service..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "14px 14px 14px 46px",
-                borderRadius: "12px",
-                border: `1px solid ${T.border}`,
-                fontSize: "15px",
-                background: T.bgInput,
-                color: T.textPrim,
-                outline: "none",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-
-          <a
-            href="#catalogue"
-            style={{
-              display: "inline-block",
-              background: `linear-gradient(135deg, ${T.red} 0%, #8a0008 100%)`,
-              color: "#fff",
-              padding: isMobile ? "14px 32px" : "16px 44px",
-              borderRadius: "999px",
-              fontSize: isMobile ? "14px" : "15px",
-              fontWeight: "bold",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              boxShadow: "0 8px 24px rgba(192,0,10,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
-              border: "1px solid rgba(255,255,255,0.15)",
-            }}
-          >
-            🔥 Explorer le catalogue
-          </a>
-
-          <div
-            style={{
-              marginTop: "28px",
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: isMobile ? "16px" : "32px",
-              fontSize: "12px",
-              color: T.textDim,
-            }}
-          >
-            <span>🔒 100% Discret</span>
-            <span>✓ Profils vérifiés</span>
-            <span>💸 Tarifs transparents</span>
-          </div>
-        </div>
-      </section>
-
-      <div id="catalogue" />
       <div
         style={{
           display: "flex",
