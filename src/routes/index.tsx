@@ -6,6 +6,7 @@ import perf3 from "@/assets/perf-3.jpg";
 import perf4 from "@/assets/perf-4.jpg";
 import perf5 from "@/assets/perf-5.jpg";
 import perf6 from "@/assets/perf-6.jpg";
+import heroCover from "@/assets/hero-cover.jpg";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -1006,27 +1007,45 @@ function App() {
     <div style={{ minHeight: "100vh", background: T.bg, fontFamily: "'Georgia', serif" }}>
       <header
         style={{
-          background: "#080808",
+          background: `linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.75) 55%, rgba(8,8,8,0.95) 100%), url(${heroCover}) center/cover no-repeat`,
           borderBottom: `1px solid ${T.border}`,
-          padding: isMobile ? "36px 20px 28px" : "52px 40px 44px",
+          padding: isMobile ? "80px 20px 36px" : "140px 40px 56px",
           textAlign: "center",
           position: "relative",
           overflow: "hidden",
+          minHeight: isMobile ? "70vh" : "80vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div
           style={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            width: "600px",
-            height: "200px",
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(192,0,10,0.12) 0%, transparent 70%)",
+            inset: 0,
+            background: "radial-gradient(ellipse at center, rgba(192,0,10,0.18) 0%, transparent 60%)",
             pointerEvents: "none",
           }}
         />
+        <div
+          style={{
+            position: "absolute",
+            top: isMobile ? "16px" : "24px",
+            right: isMobile ? "16px" : "24px",
+            background: "rgba(192,0,10,0.85)",
+            color: "#fff",
+            padding: "6px 12px",
+            fontSize: "10px",
+            letterSpacing: "2px",
+            textTransform: "uppercase",
+            fontWeight: "bold",
+            borderRadius: "4px",
+            border: "1px solid rgba(255,255,255,0.2)",
+          }}
+        >
+          18+ Adults Only
+        </div>
         <p
           style={{
             margin: "0 0 10px",
