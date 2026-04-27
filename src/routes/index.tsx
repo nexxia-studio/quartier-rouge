@@ -7,6 +7,7 @@ import perf4 from "@/assets/perf-4.jpg";
 import perf5 from "@/assets/perf-5.jpg";
 import perf6 from "@/assets/perf-6.jpg";
 import heroCover from "@/assets/hero-cover.jpg";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -1020,11 +1021,39 @@ function App() {
           alignItems: "center",
         }}
       >
+        <video
+          src={heroVideoAsset.url}
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={heroCover}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at center, rgba(192,0,10,0.18) 0%, transparent 60%)",
+            background: "linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.7) 55%, rgba(8,8,8,0.95) 100%)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(ellipse at center, rgba(192,0,10,0.22) 0%, transparent 60%)",
+            zIndex: 1,
             pointerEvents: "none",
           }}
         />
